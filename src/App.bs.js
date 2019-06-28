@@ -5,6 +5,7 @@ var List = require("bs-platform/lib/js/list.js");
 var $$Array = require("bs-platform/lib/js/array.js");
 var Curry = require("bs-platform/lib/js/curry.js");
 var React = require("react");
+var $$String = require("bs-platform/lib/js/string.js");
 
 function App(Props) {
   var match = React.useState((function () {
@@ -17,18 +18,22 @@ function App(Props) {
   var setNewTodo = match$1[1];
   var newTodo = match$1[0];
   var addTodo = function (param) {
-    Curry._1(setTodos, (function (todos) {
-            return /* :: */[
-                    /* record */[
-                      /* text */newTodo,
-                      /* completed */false
-                    ],
-                    todos
-                  ];
-          }));
-    return Curry._1(setNewTodo, (function (param) {
-                  return "";
-                }));
+    if ($$String.trim(newTodo) !== "") {
+      Curry._1(setTodos, (function (todos) {
+              return /* :: */[
+                      /* record */[
+                        /* text */newTodo,
+                        /* completed */false
+                      ],
+                      todos
+                    ];
+            }));
+      return Curry._1(setNewTodo, (function (param) {
+                    return "";
+                  }));
+    } else {
+      return 0;
+    }
   };
   return React.createElement("div", {
               style: {
@@ -54,8 +59,17 @@ function App(Props) {
                       onClick: addTodo
                     }, "Submit")), React.createElement("div", undefined, $$Array.of_list(List.mapi((function (index, todo) {
                             return React.createElement("div", {
-                                        key: String(index)
-                                      }, todo[/* text */0]);
+                                        key: String(index),
+                                        style: {
+                                          display: "grid",
+                                          width: "300px",
+                                          gridTemplateColumns: "auto auto",
+                                          justifyItems: "center"
+                                        }
+                                      }, todo[/* text */0], React.createElement("input", {
+                                            checked: todo[/* completed */1],
+                                            type: "checkbox"
+                                          }));
                           }), match[0]))));
 }
 
