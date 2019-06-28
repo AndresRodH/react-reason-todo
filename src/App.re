@@ -1,7 +1,10 @@
 type todo = {
+  id: int,
   text: string,
   completed: bool,
 };
+
+let idRef = ref(0);
 
 [@react.component]
 let make = () => {
@@ -9,10 +12,20 @@ let make = () => {
   let (newTodo, setNewTodo) = React.useState(() => "");
   let addTodo = _ =>
     if (String.trim(newTodo) != "") {
-      setTodos(todos => [{text: newTodo, completed: false}, ...todos]);
+      idRef := idRef^ + 1;
+      setTodos(todos =>
+        [{id: idRef^, text: newTodo, completed: false}, ...todos]
+      );
       setNewTodo(_ => "");
     };
-
+  let toggle = (id: int) => {
+    let todos =
+      List.map(
+        item => item.id === id ? {...item, completed: !item.completed} : item,
+        todos,
+      );
+    setTodos(_ => todos);
+  };
   <div
     style={ReactDOMRe.Style.make(
       ~display="flex",
@@ -35,19 +48,20 @@ let make = () => {
       <button onClick=addTodo> {React.string("Submit")} </button>
     </div>
     <div>
-      {List.mapi(
-         (index, todo) =>
+      {List.map(
+         todo =>
            <div
              style={ReactDOMRe.Style.make(
                ~display="grid",
-               ~gridTemplateColumns="auto auto",
-               ~width="300px",
-               ~justifyItems="center",
+               ~gridTemplateColumns="auto 1fr",
+               ~maxWidth="300px",
+               ~cursor="pointer",
                (),
              )}
-             key={string_of_int(index)}>
-             {React.string(todo.text)}
+             onClick={_ => toggle(todo.id)}
+             key={string_of_int(todo.id)}>
              <input type_="checkbox" checked={todo.completed} />
+             {React.string(todo.text)}
            </div>,
          todos,
        )

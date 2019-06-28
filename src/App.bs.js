@@ -7,11 +7,14 @@ var Curry = require("bs-platform/lib/js/curry.js");
 var React = require("react");
 var $$String = require("bs-platform/lib/js/string.js");
 
+var idRef = /* record */[/* contents */0];
+
 function App(Props) {
   var match = React.useState((function () {
           return /* [] */0;
         }));
   var setTodos = match[1];
+  var todos = match[0];
   var match$1 = React.useState((function () {
           return "";
         }));
@@ -19,9 +22,11 @@ function App(Props) {
   var newTodo = match$1[0];
   var addTodo = function (param) {
     if ($$String.trim(newTodo) !== "") {
+      idRef[0] = idRef[0] + 1 | 0;
       Curry._1(setTodos, (function (todos) {
               return /* :: */[
                       /* record */[
+                        /* id */idRef[0],
                         /* text */newTodo,
                         /* completed */false
                       ],
@@ -57,23 +62,42 @@ function App(Props) {
                         })
                     }), React.createElement("button", {
                       onClick: addTodo
-                    }, "Submit")), React.createElement("div", undefined, $$Array.of_list(List.mapi((function (index, todo) {
+                    }, "Submit")), React.createElement("div", undefined, $$Array.of_list(List.map((function (todo) {
                             return React.createElement("div", {
-                                        key: String(index),
+                                        key: String(todo[/* id */0]),
                                         style: {
+                                          cursor: "pointer",
                                           display: "grid",
-                                          width: "300px",
-                                          gridTemplateColumns: "auto auto",
-                                          justifyItems: "center"
-                                        }
-                                      }, todo[/* text */0], React.createElement("input", {
-                                            checked: todo[/* completed */1],
+                                          maxWidth: "300px",
+                                          gridTemplateColumns: "auto 1fr"
+                                        },
+                                        onClick: (function (param) {
+                                            var id = todo[/* id */0];
+                                            var todos$1 = List.map((function (item) {
+                                                    var match = item[/* id */0] === id;
+                                                    if (match) {
+                                                      return /* record */[
+                                                              /* id */item[/* id */0],
+                                                              /* text */item[/* text */1],
+                                                              /* completed */!item[/* completed */2]
+                                                            ];
+                                                    } else {
+                                                      return item;
+                                                    }
+                                                  }), todos);
+                                            return Curry._1(setTodos, (function (param) {
+                                                          return todos$1;
+                                                        }));
+                                          })
+                                      }, React.createElement("input", {
+                                            checked: todo[/* completed */2],
                                             type: "checkbox"
-                                          }));
-                          }), match[0]))));
+                                          }), todo[/* text */1]);
+                          }), todos))));
 }
 
 var make = App;
 
+exports.idRef = idRef;
 exports.make = make;
 /* react Not a pure module */
