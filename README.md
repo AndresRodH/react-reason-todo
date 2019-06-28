@@ -1,4 +1,6 @@
-# my-react-app
+# react-reason-todo
+
+Basic TODO app to try out [Reason](https://reasonml.github.io/)
 
 ## Run Project
 
