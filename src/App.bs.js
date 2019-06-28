@@ -91,6 +91,7 @@ function App(Props) {
                                           })
                                       }, React.createElement("input", {
                                             checked: todo[/* completed */2],
+                                            readOnly: true,
                                             type: "checkbox"
                                           }), todo[/* text */1]);
                           }), todos))));

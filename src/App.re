@@ -60,7 +60,7 @@ let make = () => {
              )}
              onClick={_ => toggle(todo.id)}
              key={string_of_int(todo.id)}>
-             <input type_="checkbox" checked={todo.completed} />
+             <input type_="checkbox" checked={todo.completed} readOnly=true />
              {React.string(todo.text)}
            </div>,
          todos,
